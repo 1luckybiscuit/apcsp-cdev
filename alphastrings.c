@@ -2,12 +2,15 @@
 #include <string.h>
 
 int main() {
-  char string1[26];
+  char string1[27];
   char string2[] = "abcdefghijklmnopqrstuvwxyz";
   char letter = 'a';
 
   for(int i = 0; i < 26; i++) {
     string1[i] = letter;
+    if(i == 26) {
+      string1[i] = '\0';
+    }
     letter++;
   }
 
