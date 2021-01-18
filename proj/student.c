@@ -26,10 +26,13 @@ void createStudent(char* fname, char* lname, int age, int id)
   //  - the firstName and lastName strings should be dynamically created
   //    based on the size of the fname and lname arg
 
-  // Follow instructions above for the current student using numStudents 
+  // Follow instructions above for the current student using numStudents
+  // Dynamically create Student and strings 
   students[numStudents] = (Student*)malloc(sizeof(Student));
   students[numStudents]->firstName = (char*)malloc(sizeof(fname));
   students[numStudents]->lastName = (char*)malloc(sizeof(lname));
+
+  // Set each quality of struct to the parameters
   strcpy(students[numStudents]->firstName, fname);
   strcpy(students[numStudents]->lastName, lname);
   students[numStudents]->age = age;
@@ -66,7 +69,6 @@ void deleteStudents()
 
 void saveStudents(char key[])
 {
-  //printf("%s", key);
   FILE* sf;
   // Student file
 
@@ -77,17 +79,18 @@ void saveStudents(char key[])
   //       tom thumb 15 1234 
   //       james dean 21 2345 
   //       katy jones 18 4532 
+
   if (sf) {
     for(int i = 0; i < numStudents; i++) {
       // Initialize temporary string storage variables
-      char ageTemp[4];
+      char ageTemp[50];
       char idTemp[100];
 
-      // Stores the ints as strings. Was this necessary?
+      // Stores the ints as strings. Was this necessary? Not sure.
       sprintf(ageTemp, "%d", students[i]->age);
       sprintf(idTemp, "%ld", students[i]->id);
 
-      // Encrypt each aspect of the struct
+      // (Old) Apply caesar encryption
       /*
       caesarEncrypt(students[i]->firstName, key);
       caesarEncrypt(students[i]->lastName, key);
@@ -118,6 +121,7 @@ void loadStudents(char key[])
   // Load the students from the data file overwriting all existing students in memory
   // Wipes everything to "overwrite"
   deleteStudents();
+
   FILE* sf;
   sf = fopen("studentdata.txt", "r");
   if (sf) {
@@ -125,35 +129,23 @@ void loadStudents(char key[])
       // Initialize storage variables
       char fname[50];
       char lname[50];
-      char ageTemp[4];
+      char ageTemp[50];
       char idTemp[100];
       int age; long int id;
 
       // Check for a student by looking for lines with four arguments
       if(fscanf(sf, "%s %s %s %s\n", fname, lname, ageTemp, idTemp) == 4) {
-        // Looked it up--use sprintf to convert age and id to strings
-        // I get the feeling somehow that ints themselves should be able to pass into
-        //   the encrypt function with a bit of manipulation not like this. 
-        // Am I doing it right??
-        //sprintf(ageTemp, "%d", age);
-        //sprintf(idTemp, "%ld", id);
-
-        // Decrypt all aspects of the struct
+        // (Old) Apply caesar decryption
         /*caesarDecrypt(fname, key);
         caesarDecrypt(lname, key);
         caesarDecrypt(ageTemp, key);
         caesarDecrypt(idTemp, key);*/
-
-        //printf("Age and ID: %s and %s\n", ageTemp, idTemp);
 
         // Try vig decryption
         vigDecrypt(fname, key);
         vigDecrypt(lname, key);
         vigDecrypt(ageTemp, key);
         vigDecrypt(idTemp, key);
-
-        //printf("Age and ID: %s and %s\n", ageTemp, idTemp);
-
 
         // Convert age and id back to numbers to recreate student.
         // Again, I think I am supposed to do this without using atoi().
@@ -166,8 +158,8 @@ void loadStudents(char key[])
       else
         break;
     }
-    fclose(sf);
     printf("Loaded %d students\n", numStudents);
+    fclose(sf);
   }
 }
 

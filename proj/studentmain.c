@@ -27,10 +27,10 @@ int main()
   char fname[BUFFSIZE];
   char lname[BUFFSIZE];
 
-  // key to encrypt/decrypt
-  //int key = 0;
+  // key to encrypt/decrypt for caesar cypher
+  // int key = 0;
 
-  // vig key
+  // vigenere key as a string
   char key[100];
 
   while (1)
@@ -99,6 +99,12 @@ int main()
       createStudent(fname, lname, age, id);
     }
   }
+
+  /* While troubleshooting I was not sure if I was getting
+    a memory leak or anything. Not sure if this is redundant
+    if the heap collapses after exiting the program if I
+    misunderstand, but the program works as is, so I will leave
+    the final deleteStudents function in I guess. */
   deleteStudents();
   printf("\nGoodbye!\n");
 }

@@ -3,15 +3,20 @@
 //
 
 #include <string.h>
-#include <stdio.h>
 #include "encrypt.h"
 
 
 char CHARS[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 int CHARS_LEN = 62;
 
+
+// Function to take a character and convert its ASCII index to the array index
+// Used in shiftShcar and also separately in the vigenere cypher functions
+
 int findIndex(char c) {
   int index;
+
+  // Check ranges
   if(c >= 97 && c <= 122) {
     // Lowercase ASCII range
     // Subtract the ASCII value for correct index
@@ -111,40 +116,48 @@ void vigDecipher(char str[], char keyword[], int encDec)
 
   // First, create the shift pattern based off of the keyword
   int keywordSize = strlen(keyword);
+
+  // If no keyword is entered, load 'a' which will apply 0 shift to all characters
   if(keywordSize == 0) {
     char failsafe = 'a';
     strncat(keyword, &failsafe, 1);
+
+    // Don't forget that the size of the keyword must be updated
     keywordSize++;
   }
-  //printf("Pattern size: %d\n", keywordSize);
+
+  // Initialize the shift pattern array of ints with the same size as the keyword
   int shiftPattern[keywordSize];
+
+  // Use findIndex to convert each char in the keyword to a value for shiftPattern
   for (int i = 0; i < keywordSize; i++) {
     shiftPattern[i] = findIndex(keyword[i]);
-    //printf("%d ", shiftPattern[i]);
   }
-  //printf("\n");
+
   // Apply the corresponding part of the shift pattern to change the string
   int strSize = strlen(str);
   for (int i = 0; i < strSize; i++) {
+
+    // Ensure that the keyword pattern continues iterating
     int temp = i;
-    //printf("Index: %d\n", temp);
     while(temp >= keywordSize) {
-      printf("Am I running too often?");
       temp -= keywordSize;
     }
-    //printf("Trigger %d in the pattern to shift %d\n", temp, shiftPattern[temp]);
+
+    // Finally, enact the shift
     str[i] = shiftChar(str[i], shiftPattern[temp], encDec);
-    //printf("%c\n", str[i]);
   }
 
 }
 
 void vigEncrypt(char str[], char keyword[])
 {
+  // Call the shift forward
   vigDecipher(str, keyword, 1);
 }
 
 void vigDecrypt(char str[], char keyword[])
 {
+  // Call the shift backward
   vigDecipher(str, keyword, 0);
 }
