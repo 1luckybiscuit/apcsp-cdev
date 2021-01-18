@@ -28,7 +28,10 @@ int main()
   char lname[BUFFSIZE];
 
   // key to encrypt/decrypt
-  int key = 0;
+  //int key = 0;
+
+  // vig key
+  char key[100];
 
   while (1)
   {
@@ -57,13 +60,24 @@ int main()
     }
     else if (c == 'e')
     {
+      /*
+      // Ceasar cypher
+
       printf("\nEnter an encrypt/decrypt key: ");
       fgets(inputBuff, BUFFSIZE, stdin);
       int x;
+
       if (sscanf(inputBuff, "%d", &x) == 1) 
         key = x;
       else
         printf("enter a positive shift key\n");
+
+      */
+
+      // EC: Enter string for vig cypher
+      printf("\nEnter an encrypt/decrypt keyword: ");
+      fgets(inputBuff, BUFFSIZE, stdin);
+      sscanf(inputBuff, "%s", key);
     }
     else if (c == 'a')
     {
@@ -85,6 +99,6 @@ int main()
       createStudent(fname, lname, age, id);
     }
   }
-  
+  deleteStudents();
   printf("\nGoodbye!\n");
 }

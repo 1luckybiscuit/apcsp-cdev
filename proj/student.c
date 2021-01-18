@@ -64,9 +64,9 @@ void deleteStudents()
 }
 
 
-void saveStudents(int key)
+void saveStudents(char key[])
 {
-
+  //printf("%s", key);
   FILE* sf;
   // Student file
 
@@ -81,17 +81,25 @@ void saveStudents(int key)
     for(int i = 0; i < numStudents; i++) {
       // Initialize temporary string storage variables
       char ageTemp[4];
-      char idTemp[50];
+      char idTemp[100];
 
       // Stores the ints as strings. Was this necessary?
       sprintf(ageTemp, "%d", students[i]->age);
       sprintf(idTemp, "%ld", students[i]->id);
 
       // Encrypt each aspect of the struct
+      /*
       caesarEncrypt(students[i]->firstName, key);
       caesarEncrypt(students[i]->lastName, key);
       caesarEncrypt(ageTemp, key);
       caesarEncrypt(idTemp, key);
+      */
+
+      // Try vig encryption
+      vigEncrypt(students[i]->firstName, key);
+      vigEncrypt(students[i]->lastName, key);
+      vigEncrypt(ageTemp, key);
+      vigEncrypt(idTemp, key);
 
       // Print each struct aspect to the file and record it to user
       fprintf(sf, "%s %s %s %s\n", students[i]->firstName, students[i]->lastName, ageTemp, idTemp);
@@ -101,11 +109,11 @@ void saveStudents(int key)
     // Report number of students saved to the file
     printf("Saved %d students\n", numStudents);
     fclose(sf);
-  } 
+  }
 }
 
 
-void loadStudents(int key)
+void loadStudents(char key[])
 {
   // Load the students from the data file overwriting all existing students in memory
   // Wipes everything to "overwrite"
@@ -117,8 +125,8 @@ void loadStudents(int key)
       // Initialize storage variables
       char fname[50];
       char lname[50];
-      char ageTemp[50];
-      char idTemp[50];
+      char ageTemp[4];
+      char idTemp[100];
       int age; long int id;
 
       // Check for a student by looking for lines with four arguments
@@ -131,10 +139,21 @@ void loadStudents(int key)
         //sprintf(idTemp, "%ld", id);
 
         // Decrypt all aspects of the struct
-        caesarDecrypt(fname, key);
+        /*caesarDecrypt(fname, key);
         caesarDecrypt(lname, key);
         caesarDecrypt(ageTemp, key);
-        caesarDecrypt(idTemp, key);
+        caesarDecrypt(idTemp, key);*/
+
+        //printf("Age and ID: %s and %s\n", ageTemp, idTemp);
+
+        // Try vig decryption
+        vigDecrypt(fname, key);
+        vigDecrypt(lname, key);
+        vigDecrypt(ageTemp, key);
+        vigDecrypt(idTemp, key);
+
+        //printf("Age and ID: %s and %s\n", ageTemp, idTemp);
+
 
         // Convert age and id back to numbers to recreate student.
         // Again, I think I am supposed to do this without using atoi().

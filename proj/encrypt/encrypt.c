@@ -3,6 +3,7 @@
 //
 
 #include <string.h>
+#include <stdio.h>
 #include "encrypt.h"
 
 
@@ -110,29 +111,40 @@ void vigDecipher(char str[], char keyword[], int encDec)
 
   // First, create the shift pattern based off of the keyword
   int keywordSize = strlen(keyword);
+  if(keywordSize == 0) {
+    char failsafe = 'a';
+    strncat(keyword, &failsafe, 1);
+    keywordSize++;
+  }
+  //printf("Pattern size: %d\n", keywordSize);
   int shiftPattern[keywordSize];
   for (int i = 0; i < keywordSize; i++) {
     shiftPattern[i] = findIndex(keyword[i]);
+    //printf("%d ", shiftPattern[i]);
   }
-
+  //printf("\n");
   // Apply the corresponding part of the shift pattern to change the string
   int strSize = strlen(str);
   for (int i = 0; i < strSize; i++) {
     int temp = i;
-    while(temp > strlen(keyword)) {
-      temp -= strlen(keyword);
+    //printf("Index: %d\n", temp);
+    while(temp >= keywordSize) {
+      printf("Am I running too often?");
+      temp -= keywordSize;
     }
+    //printf("Trigger %d in the pattern to shift %d\n", temp, shiftPattern[temp]);
     str[i] = shiftChar(str[i], shiftPattern[temp], encDec);
+    //printf("%c\n", str[i]);
   }
 
 }
 
-void vigEncrypt(char message[], char keyword[])
+void vigEncrypt(char str[], char keyword[])
 {
-  vigDecipher(message, keyword, 1);
+  vigDecipher(str, keyword, 1);
 }
 
-void vigDecrypt(char message[], char keyword[])
+void vigDecrypt(char str[], char keyword[])
 {
-  vigDecipher(message, keyword, 0);
+  vigDecipher(str, keyword, 0);
 }

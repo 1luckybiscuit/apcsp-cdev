@@ -15,5 +15,8 @@ void decrypt(char str[], int shifts[], int shiftslen);
 void caesarEncrypt(char str[], int shift);
 void caesarDecrypt(char str[], int shift);
 
+// vigenere cypher - uses a keyword and special algorithm shift
+void vigEncrypt(char str[], char keyword[]);
+void vigDecrypt(char str[], char keyword[]);
 
 		     

@@ -26,8 +26,8 @@ void deleteStudents();
 //  load students overwrites the existing students in memory
 //  key is the encryption key 0 is no encryption
 //
-void saveStudents(int key);
-void loadStudents(int key);
+void saveStudents(char key[]);
+void loadStudents(char key[]);
 
 //
 // print all students in memory or print a specific student
