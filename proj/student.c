@@ -120,7 +120,8 @@ void loadStudents(char key[])
 {
   // Load the students from the data file overwriting all existing students in memory
   // Wipes everything to "overwrite"
-  deleteStudents();
+  if(numStudents > 0)
+    deleteStudents();
 
   FILE* sf;
   sf = fopen("studentdata.txt", "r");
